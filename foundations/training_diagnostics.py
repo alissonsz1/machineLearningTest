@@ -15,13 +15,13 @@ class Solution:
             for layer in model.children():
                 h = layer(h)
                 if isinstance(layer, nn.Linear):
-                    mean = round(h.mean().item(), 4)
-                    std = round(h.std().item(), 4)
+                    mean = h.mean().item()
+                    std = h.std().item()
                     dead_fraction = (h <= 0).all(dim=0).float().mean().item()
                     stats.append({
-                        "mean": mean,
-                        "std": std,
-                        "dead_fraction": dead_fraction
+                        "mean": round(mean,4),
+                        "std": round(std,4),
+                        "dead_fraction": round(dead_fraction,4)
                     })
         return stats
 
@@ -36,13 +36,13 @@ class Solution:
         for layer in model.children():
             if isinstance(layer, nn.Linear):
                 grad = layer.weight.grad.detach()
-                mean = round(grad.mean().item(), 4)
-                std = round(grad.std().item(), 4)
-                norm = round(grad.norm().item(), 4)
+                mean = grad.mean().item()
+                std = grad.std().item()
+                norm = grad.norm().item()
                 stats.append({
-                    "mean": mean,
-                    "std": std,
-                    "norm": norm
+                    "mean": round(mean,4),
+                    "std": round(std,4),
+                    "norm": round(norm,4)
                 })
 
         return stats
